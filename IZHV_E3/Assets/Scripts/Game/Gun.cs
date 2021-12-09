@@ -40,7 +40,7 @@ public class Gun : MonoBehaviour
     /// <summary>
     /// Shotgun spread angle in degrees.
     /// </summary>
-    public float shotgunSpread = 30.0f;
+    public float shotgunSpread = 15.0f;
     
     /// <summary>
     /// Offset at which the bullet should be spawned.
@@ -196,11 +196,16 @@ public class Gun : MonoBehaviour
          *  - Number / spread of shotgun bullets : shotgunBullets, shotgunSpread
          * Implement both single shot and shotgun (swap by pressing <SPACE> by default)
          */
-        
-        SpawnBullet(
-            new Vector3{ x = 0.0f, y = 0.0f, z = 0.0f }, 
-            Quaternion.Euler(0.0f, 0.0f, 0.0f)
-        );
+        if(shotgun){
+            for(int i = 0; i < shotgunBullets; i++){
+                var angle = director.rotation.eulerAngles.y - (shotgunBullets * shotgunSpread / 2) + (i * shotgunSpread);
+                var rotation = Quaternion.Euler(director.eulerAngles.x, angle, director.eulerAngles.z);
+                SpawnBullet(director.position, rotation);
+            }
+        }
+        else{
+            SpawnBullet(director.position, director.rotation);
+        }
     }
 
     /// <summary>
